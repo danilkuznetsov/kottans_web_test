@@ -1,45 +1,79 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="x-ua-compatible" content="ie=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Trivia Quiz Game</title>
-	<link rel="stylesheet" type="text/css" href="styles/main.css">
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trivia Quiz Game</title>
+    <link rel="stylesheet" type="text/css" href="styles/normalize.css">
+    <link rel="stylesheet" type="text/css" href="styles/skeleton.css">
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
 </head>
 <body>
-	<header>
-		<div> QUIZ GAME </div> 
-		<div> Correct answers: </div>
-		<div> Total Questions: </div>
-	</header>
-	<section>
-		<header>
-			<div> Question ID </div>
-			<div> Question Category </div>
-			<div> Text of question </div>
-		</header>
-		<section>
-			<input type="button" name="Skip">
-			<div>
-				<ul>
-					<li><button>Q</button> </li>
-					<li><button>U</button> </li>
-					<li><button>I</button> </li>
-					<li><button>Z</button> </li>
-				</ul>
-			</div>
-			<div>
-				<ul>
-					<li><button>Z</button> </li>
-					<li><button>U</button> </li>
-					<li><button>Q</button> </li>
-					<li><button>Z</button> </li>
-				</ul>
-			</div>
-			<input type="button" name="Next Question">
-		</section>
-
-	</section>
+    <div class="navbar">
+        <div class="container">
+            <div class="row">
+                <div class="twelve columns">
+                    <h1 class="brand"> QUIZ GAME</h1>
+                </div> 
+             </div>
+        </div>
+    </div>
+    <div class="container"> 
+        <div class="row">
+            <div class="one-half column u-text-left">
+                <p class="game-status"> Correct answers: 0</p>
+            </div>
+            <div class="one-half column u-text-right">
+                <p class="game-status"> Total Questions: 0</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="twelve columns u-text-center">
+                <h2 class="quiz-id"> Question ID</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="twelve columns u-text-center">
+                <h3 class="quiz-category"> Question Category</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="twelve columns u-text-center">
+                <p class="quiz-question"> Text of question</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="twelve columns">
+                <button class="button-skip-quiz">Skip</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="twelve columns">
+                <p class="answer-status answer-status-correct answer-status-hidden u-text-center">Answer status</p>
+                <ul class="character-list u-text-center">
+                    <li><button></button> </li>
+                    <li><button></button> </li>
+                    <li><button></button> </li>
+                    <li><button></button> </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="twelve columns">    
+                <ul class="character-list u-text-center">
+                    <li><button>I</button> </li>
+                    <li><button>U</button> </li>
+                    <li><button>Q</button> </li>
+                    <li><button>Z</button> </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="twelve columns">
+                <button class="button-next-quiz">Next quiz</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
