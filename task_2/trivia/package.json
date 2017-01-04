@@ -16,7 +16,7 @@
     "url": "https://github.com/danilkuznetsov/kottans_web_test/issues"
   },
   "homepage": "https://github.com/danilkuznetsov/kottans_web_test/task_02/trivia#readme",
-  "dependencies": {
-    "jasmine-core": "^2.5.2"
+  "devDependencies": {
+    "jasmine": "^2.5.2"
   }
 }
