@@ -6,8 +6,8 @@
     }
 
     StorageEngine.prototype.read = function() {
-        if (!localStorage[name]) {
-            localStorage[name] = JSON.stringify({});
+        if (!localStorage[this._dbName]) {
+            localStorage[this._dbName] = JSON.stringify({});
         }
         return JSON.parse(localStorage[this._dbName]);
     };
