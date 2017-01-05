@@ -1,13 +1,11 @@
 (function(window) {
     'use strict';
 
-    function StoreService(storageEngine, callback) {
+    function StoreService(storageEngine) {
         this._storageEngine = storageEngine;
-        callback = callback || function() {};
-        callback.call(this, this._storageEngine.read());
     }
 
-    StoreService.prototype.save = function(updateKey, updateData, callback) {
+    StoreService.prototype.saveByKey = function(updateKey, updateData, callback) {
         var data = this._storageEngine.read();
         data[updateKey] = updateData;
 
@@ -17,9 +15,22 @@
         callback.call(this, data);
     };
 
-    StoreService.prototype.read = function(callback) {
+    StoreService.prototype.readAll = function(callback) {
         callback = callback || function() {};
         callback.call(this, this._storageEngine.read());
+    };
+
+    StoreService.prototype.readByKey = function(key, callback) {
+
+        var data = this._storageEngine.read();
+
+        var result = {};
+        result[key] = data[key];
+
+        callback = callback || function() {};
+        callback.call(this, result);
+
+        return result;
     };
 
     // export to window

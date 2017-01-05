@@ -1,14 +1,15 @@
 (function(window) {
     'use strict';
 
-    function StorageEngine(name) {
+    function StorageEngine(name, initData) {
         this._dbName = name;
+        if (!localStorage[this._dbName]) {
+            localStorage[this._dbName] = JSON.stringify(initData);
+        }
     }
 
     StorageEngine.prototype.read = function() {
-        if (!localStorage[this._dbName]) {
-            localStorage[this._dbName] = JSON.stringify({});
-        }
+   
         return JSON.parse(localStorage[this._dbName]);
     };
     StorageEngine.prototype.save = function(data) {
