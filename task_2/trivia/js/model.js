@@ -26,6 +26,18 @@
     Model.prototype.readCountAnswer = function(callback) {
         this._storeService.readByKey('countAnswer', callback);
     };
+
+    Model.prototype.getQuestion = function(callback) {
+        $.getJSON("http://jservice.io/api/random", function(data) {
+            var result = {};
+            result.quizId = data[0].id;
+            result.quizText = data[0].question;
+            result.quizCategory = data[0].category.title;
+
+            callback = callback || function() {};
+            callback.call(this, result);
+        });
+    };
     // export to window
     window.app = window.app || {};
     window.app.Model = Model;
