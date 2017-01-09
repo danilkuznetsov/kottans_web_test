@@ -20,9 +20,11 @@ describe('controller', function() {
 
         modelMock.getQuestion.and.callFake(function(callback) {
             callback({
-                'quizId': 100,
-                'quizCategory': 'QuizCategory',
-                'quizText': 'QuizText'
+                quizId: 100,
+                quizCategory: 'QuizCategory',
+                quizText: 'QuizText',
+                quizAnswer: 'Test quiz answer',
+                quizAnswerByChar: ['T', 'e', 's', 't', ' ', 'q', 'u', 'i', 'z', ' ', 'a', 'n', 's', 'w', 'e', 'r']
             });
         });
 
@@ -43,10 +45,14 @@ describe('controller', function() {
     it('should get next question and render result to view', function() {
         controller.nextQuestion();
         expect(modelMock.getQuestion).toHaveBeenCalled();
+
         expect(viewMock.render).toHaveBeenCalledWith('showQuestion', {
-            'quizId': 100,
-            'quizCategory': 'QuizCategory',
-            'quizText': 'QuizText'
+            quizId: 100,
+            quizCategory: 'QuizCategory',
+            quizText: 'QuizText',
+            quizAnswer: 'Test quiz answer',
+            quizAnswerByChar: ['T', 'e', 's', 't', ' ', 'q', 'u', 'i', 'z', ' ', 'a', 'n', 's', 'w', 'e', 'r']
         });
+
     });
 });

@@ -3,6 +3,7 @@
 
     function Model(storeService) {
         this._storeService = storeService;
+        this._answer = '';
     }
 
     Model.prototype.incrementCountAnswer = function(callback) {
@@ -27,17 +28,15 @@
         this._storeService.readByKey('countAnswer', callback);
     };
 
-    Model.prototype.getQuestion = function(callback) {
-        $.getJSON("http://jservice.io/api/random", function(data) {
-            var result = {};
-            result.quizId = data[0].id;
-            result.quizText = data[0].question;
-            result.quizCategory = data[0].category.title;
-
-            callback = callback || function() {};
-            callback.call(this, result);
-        });
+    Model.prototype.getQuestion = function(cbSuccess, cbFail) {
+        var self = this;
+        self._storeService.getQuestion(function(result) {
+            self._answer = result.quizAnswer;
+            result.quizAnswerByChar = result.quizAnswer.split('');
+            cbSuccess.call(this, result);
+        }, cbFail);
     };
+
     // export to window
     window.app = window.app || {};
     window.app.Model = Model;

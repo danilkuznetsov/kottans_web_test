@@ -27,13 +27,13 @@ button.button-next-quiz-hidden {
     display: none;
 }
 
-ul.character-list {
+ul.characters-list {
     padding: 15px;
     border-radius: 4px;
     border: 1px solid #bbb;
 }
 
-ul.character-list li {
+ul.characters-list li {
     display: inline-block;
 }
 

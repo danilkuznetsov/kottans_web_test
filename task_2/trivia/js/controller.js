@@ -35,9 +35,12 @@
     Controller.prototype.nextQuestion = function() {
         var self = this;
         self.model.getQuestion(function(data) {
+            console.log(data.quizAnswer);
             self.view.render('showQuestion', data);
+            // self.view.render('showStartAnswerBoard',);
         });
     };
+
 
     //export to window
     window.app = window.app || {};

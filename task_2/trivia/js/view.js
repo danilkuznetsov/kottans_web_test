@@ -5,6 +5,10 @@
         this.countQuestion = $('.count-question');
         this.countAnswer = $('.count-answer');
 
+        this.isAnswerCharacters = $('.characters-list-is-answer');
+        this.toAnswerCharacters = $('.characters-list-to-answer');
+
+
         this.quizId = $('.quiz-id');
         this.quizCategory = $('.quiz-category');
         this.quizText = $('.quiz-question');
@@ -28,9 +32,25 @@
                 self.quizId.text('Question ID : ' + param.quizId);
                 self.quizCategory.text('Question Category : ' + param.quizCategory);
                 self.quizText.text(param.quizText);
+                self.drawAnswerByChar(param.quizAnswerByChar);
+                self.drawEmptyFieldsForAnswer(param.quizAnswerByChar.length);
             },
         };
         viewCommands[command]();
+    };
+
+    View.prototype.drawEmptyFieldsForAnswer = function(countCharacters) {
+        this.isAnswerCharacters.empty();
+        for (var index = 0; index < countCharacters; index++) {
+            this.isAnswerCharacters.append('<li><button></button> </li>');
+        }
+    };
+
+    View.prototype.drawAnswerByChar = function(answerByChar) {
+        this.toAnswerCharacters.empty();
+        for (var index = 0; index < answerByChar.length; index++) {
+            this.toAnswerCharacters.append('<li><button>' + answerByChar[index] + '</button> </li>');
+        }
     };
 
     View.prototype.bind = function(event, handler) {
@@ -41,7 +61,7 @@
             });
         } else if (event === 'skipQuiz') {
             self.btnSkipQuiz.click(function() {
-                handler(self.countAnswer.text())
+                handler(self.countAnswer.text());
             });
         }
 

@@ -33,6 +33,31 @@
         return result;
     };
 
+    StoreService.prototype.getQuestion = function(cbSuccess, cbFail) {
+
+        var request = $.getJSON("http://jservice.io/api/random");
+
+        request.done(function(data) {
+            var result = {};
+            var triviaQuiz = data.shift();
+
+            result.quizId = triviaQuiz.id;
+            result.quizText = triviaQuiz.question;
+            result.quizCategory = triviaQuiz.category.title;
+            // clean up  the answer from atrifacts
+            result.quizAnswer = triviaQuiz.answer.replace(/<i>|<\/i>|(|)|\\|\//g, '');
+
+            cbSuccess = cbSuccess || function() {};
+            cbSuccess.call(this, result);
+
+        });
+
+        request.fail(function() {
+            cbFail();
+        });
+
+    };
+
     // export to window
     window.app = window.app || {};
     window.app.StoreService = StoreService;

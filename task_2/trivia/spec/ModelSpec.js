@@ -16,16 +16,26 @@ describe('model ', function() {
             countQuestion: 100,
         });
 
-        storeServiceMock = jasmine.createSpyObj('storeServiceMock', ['readAll', 'readByKey', 'saveByKey']);
+        storeServiceMock = jasmine.createSpyObj('storeServiceMock', ['readAll', 'readByKey', 'saveByKey', 'getQuestion']);
         storeServiceMock.readByKey.and.returnValue({
             countAnswer: 100,
             countQuestion: 100,
         });
 
+        storeServiceMock.getQuestion.and.callFake(function(cbSucces, cbFail) {
+            cbSucces({
+                quizId: 101,
+                quizCategory: 'TestCategory',
+                quizText: 'Test quiz text',
+                quizAnswer: 'Test quiz answer',
+                quizAnswerByChar: ['T', 'e', 's', 't', ' ', 'q', 'u', 'i', 'z', ' ', 'a', 'n', 's', 'w', 'e', 'r']
+            });
+        });
+
     });
 
     it('should increase count answer', function() {
-    
+
         setUpModel(storeServiceMock);
 
         model.incrementCountAnswer(testCallbackMock);
@@ -103,6 +113,42 @@ describe('model ', function() {
         expect(testCallbackMock).toHaveBeenCalledWith({
             countAnswer: 100,
         });
+    });
+
+    it('should get next question and call success callback function', function() {
+        setUpModel(storeServiceMock);
+
+        var cbSuccessSpy = jasmine.createSpy('cbSucces');
+        var cbFailSpy = jasmine.createSpy('cbFail');
+
+        model.getQuestion(cbSuccessSpy, cbFailSpy);
+
+        expect(cbSuccessSpy).toHaveBeenCalledWith({
+            quizId: 101,
+            quizCategory: 'TestCategory',
+            quizText: 'Test quiz text',
+            quizAnswer: 'Test quiz answer',
+            quizAnswerByChar: ['T', 'e', 's', 't', ' ', 'q', 'u', 'i', 'z', ' ', 'a', 'n', 's', 'w', 'e', 'r']
+        });
+        expect(cbFailSpy).not.toHaveBeenCalled();
+    });
+
+    it('should get next quiestion and call fail callback function', function() {
+        var failStoreServiceMock = jasmine.createSpyObj('failStoreServiceMock', ['getQuestion']);
+        failStoreServiceMock.getQuestion.and.callFake(function(cbSucces, cbFail) {
+            cbFail();
+        });
+
+        var cbSuccessSpy = jasmine.createSpy('cbSucces');
+        var cbFailSpy = jasmine.createSpy('cbFail');
+
+
+        setUpModel(failStoreServiceMock);
+
+        model.getQuestion(cbSuccessSpy, cbFailSpy);
+
+        expect(cbSuccessSpy).not.toHaveBeenCalled();
+        expect(cbFailSpy).toHaveBeenCalled();
     });
 
 });
