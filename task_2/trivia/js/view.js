@@ -42,12 +42,13 @@
     View.prototype.drawEmptyFieldsForAnswer = function(countCharacters) {
         this.isAnswerCharacters.empty();
         for (var index = 0; index < countCharacters; index++) {
-            this.isAnswerCharacters.append('<li><button></button> </li>');
+            this.isAnswerCharacters.append('<li><button>&ensp;</button></li>');
         }
     };
 
     View.prototype.drawAnswerByChar = function(answerByChar) {
         this.toAnswerCharacters.empty();
+        var htmCharlSpace = '&ensp;';
         for (var index = 0; index < answerByChar.length; index++) {
             this.toAnswerCharacters.append('<li><button>' + answerByChar[index] + '</button> </li>');
         }

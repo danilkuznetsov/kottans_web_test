@@ -23,7 +23,7 @@ button.button-next-quiz {
     width: 100%;
 }
 
-button.button-next-quiz-hidden {
+button.button-next-quiz--hidden {
     display: none;
 }
 
@@ -35,6 +35,7 @@ ul.characters-list {
 
 ul.characters-list li {
     display: inline-block;
+    margin: 3px;
 }
 
 .quiz-id {

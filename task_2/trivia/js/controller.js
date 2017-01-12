@@ -37,8 +37,22 @@
         self.model.getQuestion(function(data) {
             console.log(data.quizAnswer);
             self.view.render('showQuestion', data);
-            // self.view.render('showStartAnswerBoard',);
         });
+    };
+
+    Controller.prototype.createStartScreen = function() {
+        var self = this;
+
+        self.model.readCountAnswer(function(data) {
+            self.view.render('showCountAnswer', data.countAnswer);
+        });
+
+
+        self.model.readCountQuestion(function(data) {
+            self.view.render('showCountQuestion', data.countQuestion);
+        });
+
+        self.nextQuestion();
     };
 
 

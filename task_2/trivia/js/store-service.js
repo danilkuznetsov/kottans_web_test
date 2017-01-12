@@ -35,7 +35,7 @@
 
     StoreService.prototype.getQuestion = function(cbSuccess, cbFail) {
 
-        var request = $.getJSON("http://jservice.io/api/random");
+        var request = $.getJSON("http://jservice.io/api/random?count=10");
 
         request.done(function(data) {
             var result = {};
@@ -44,8 +44,9 @@
             result.quizId = triviaQuiz.id;
             result.quizText = triviaQuiz.question;
             result.quizCategory = triviaQuiz.category.title;
-            // clean up  the answer from atrifacts
-            result.quizAnswer = triviaQuiz.answer.replace(/<i>|<\/i>|(|)|\\|\//g, '');
+            // clean up  the answer from atrifacts and replace space to _
+
+            result.quizAnswer = triviaQuiz.answer.replace(/<i>|<\/i>|\(|\)|\\|\/|\"|\'/g, '').replace(/\s/g, '_');
 
             cbSuccess = cbSuccess || function() {};
             cbSuccess.call(this, result);
