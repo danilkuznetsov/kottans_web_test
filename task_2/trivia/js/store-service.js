@@ -46,7 +46,8 @@
             result.quizCategory = triviaQuiz.category.title;
             // clean up  the answer from atrifacts and replace space to _
 
-            result.quizAnswer = triviaQuiz.answer.replace(/<i>|<\/i>|\(|\)|\\|\/|\"|\'/g, '').replace(/\s/g, '_');
+            var answer = triviaQuiz.answer.replace(/<i>|<\/i>|\(|\)|\\|\/|\"|\'/g, '').replace(/\s/g, '_');
+            result.quizAnswer = answer.toLowerCase();
 
             cbSuccess = cbSuccess || function() {};
             cbSuccess.call(this, result);
