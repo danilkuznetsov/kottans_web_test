@@ -57,7 +57,7 @@ describe('controller', function() {
     });
 
     it('should get next question and render result to view', function() {
-        controller.nextQuestion();
+        controller.getNextQuestion();
         expect(modelMock.getQuestion).toHaveBeenCalled();
 
         expect(viewMock.render).toHaveBeenCalledWith('showQuestion', {
@@ -71,7 +71,7 @@ describe('controller', function() {
     });
 
     it('should create start screen: get next question, get count answer and quiestion  and render result to view', function() {
-        controller.createStartScreen();
+        controller.loadGame();
 
         expect(modelMock.readCountQuestion).toHaveBeenCalled();
         expect(modelMock.readCountAnswer).toHaveBeenCalled();

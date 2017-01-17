@@ -7,14 +7,23 @@
         self.view = view;
 
 
-        self.view.bind('nextQuiz', function(data) {
-            self.nextQuestion();
+        self.view.bind('nextQuiz', function() {
+            self.getNextQuestion();
             self.updateCountQuestion();
         });
 
-        self.view.bind('skipQuiz', function(data) {
-            self.nextQuestion();
+        self.view.bind('skipQuiz', function() {
+            self.getNextQuestion();
             self.updateCountQuestion();
+        });
+
+
+        self.view.bind('addClueToSolution', function(char, index) {
+            self.addCharToSolution(char, index);
+        });
+
+        self.view.bind('removeClueInSolution', function(char, index) {
+            self.removeCharInSolution(char, index);
         });
     }
 
@@ -32,15 +41,17 @@
         });
     };
 
-    Controller.prototype.nextQuestion = function() {
+    Controller.prototype.getNextQuestion = function() {
         var self = this;
-        self.model.getQuestion(function(data) {
-            console.log(data.quizAnswer);
-            self.view.render('showQuestion', data);
+        self.model.getQuestion(function(question) {
+            console.log(question.quizAnswer);
+            self.view.render('showQuestion', question);
+        }, function(error) {
+            console.log(error);
         });
     };
 
-    Controller.prototype.createStartScreen = function() {
+    Controller.prototype.loadGame = function() {
         var self = this;
 
         self.model.readCountAnswer(function(data) {
@@ -52,9 +63,37 @@
             self.view.render('showCountQuestion', data.countQuestion);
         });
 
-        self.nextQuestion();
+        self.getNextQuestion();
     };
 
+    Controller.prototype.addCharToSolution = function(char, index) {
+        var self = this;
+        self.model.addCharToSolution(char, index, function(char, index) {
+            self.view.render('removeCharInClues', {
+                char: char,
+                index: index
+            });
+            self.view.render('addCharToSolution', {
+                char: char,
+                index: index
+            });
+        });
+
+    };
+
+    Controller.prototype.removeCharInSolution = function(char, index) {
+        var self = this;
+        self.model.removeCharInSolution(char, index, function(char, index) {
+            self.view.render('removeCharInSolution', {
+                char: char,
+                index: index
+            });
+            self.view.render('addCharToClues', {
+                char: char,
+                index: index
+            });
+        });
+    };
 
     //export to window
     window.app = window.app || {};

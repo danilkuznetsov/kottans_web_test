@@ -3,7 +3,8 @@
 
     function Model(storeService) {
         this._storeService = storeService;
-        this._answer = '';
+        this._correctAnswer = '';
+        this._solution = [];
     }
 
     Model.prototype.incrementCountAnswer = function(callback) {
@@ -30,12 +31,36 @@
 
     Model.prototype.getQuestion = function(cbSuccess, cbFail) {
         var self = this;
-        self._storeService.getQuestion(function(result) {
-            self._answer = result.quizAnswer;
-            result.quizAnswerByChar = result.quizAnswer.split('');
-            cbSuccess.call(this, result);
+        self._storeService.getQuestion(function(receivedQuestion) {
+
+            self._correctAnswer = receivedQuestion.quizAnswer;
+            self._solution = [];
+
+            receivedQuestion.quizAnswerByChar = self._correctAnswer.split('');
+            cbSuccess.call(this, receivedQuestion);
         }, cbFail);
     };
+
+    Model.prototype.addCharToSolution = function(char, index, callback) {
+        var self = this;
+        self._solution.push({
+            char: char,
+            index: index
+        });
+        callback = callback || function() {};
+        callback.call(this, char, index);
+    };
+
+    Model.prototype.removeCharInSolution = function(char, index, callback) {
+        var self = this;
+        var delIndex = self._solution.find(function(element) {
+            return element.char === char && element.index === index;
+        });
+        self._solution.splice(delIndex, 1);
+        callback = callback || function() {};
+        callback.call(this, char, index);
+    };
+
 
     // export to window
     window.app = window.app || {};

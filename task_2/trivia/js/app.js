@@ -12,11 +12,11 @@
         this.controller = new app.Controller(this.model, this.view);
     }
 
-    QuizGame.prototype.startOnLoad = function() {
-        quizGame.controller.createStartScreen();
+    QuizGame.prototype.loadGame = function() {
+        this.controller.loadGame();
 
     };
 
     var quizGame = new QuizGame();
-    quizGame.startOnLoad();
+    quizGame.loadGame();
 })(window);
