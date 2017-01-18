@@ -14,4 +14,4 @@ Demo - [Client Trivia Quiz API](https://danilkuznetsov.github.io/kottans_web_tes
 ## HowTo develop
 1. Clone repo to your workspace.
 2. Use `npm install` to install core dependencies.
-3. Write code and run test. Use spec/SpecRunner.html to run tests for appliction.
+3. Write code and run test. Use `spec/SpecRunner.html` to run jasmine tests for application.
