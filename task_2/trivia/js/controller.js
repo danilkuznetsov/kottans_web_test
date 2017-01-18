@@ -9,12 +9,10 @@
 
         self.view.bind('nextQuiz', function() {
             self.getNextQuestion();
-            self.updateCountQuestion();
         });
 
         self.view.bind('skipQuiz', function() {
             self.getNextQuestion();
-            self.updateCountQuestion();
         });
 
 
@@ -46,6 +44,7 @@
         self.model.getQuestion(function(question) {
             console.log(question.quizAnswer);
             self.view.render('showQuestion', question);
+            self.updateCountQuestion();
         }, function(error) {
             console.log(error);
         });
@@ -68,7 +67,8 @@
 
     Controller.prototype.addCharToSolution = function(char, index) {
         var self = this;
-        self.model.addCharToSolution(char, index, function(char, index) {
+        self.model.addCharToSolution(char, index, function(char, index, status) {
+
             self.view.render('removeCharInClues', {
                 char: char,
                 index: index
@@ -77,6 +77,13 @@
                 char: char,
                 index: index
             });
+
+            if (status === 'correct') {
+                self.updateCountAnswer();
+                self.view.render('showCorrectMessage');
+            } else if (status === 'incorrect') {
+                self.view.render('showInCorrectMessage');
+            }
         });
 
     };

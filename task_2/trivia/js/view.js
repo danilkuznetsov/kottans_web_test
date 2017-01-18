@@ -16,6 +16,9 @@
 
         this.btnSkipQuiz = qs('.button-skip-quiz');
         this.btnNextQuiz = qs('.button-next-quiz');
+
+        this.solutionStatus = qs('.answer-status');
+
     }
 
     View.prototype.render = function(command, param) {
@@ -32,6 +35,8 @@
                 // reset 
                 self.solution.innerHTML = "";
                 self.clues.innerHTML = "";
+                self.btnNextQuiz.className = 'button-next-quiz button-next-quiz--hidden';
+                self.solutionStatus.className = 'answer-status answer-status-correct answer-status-hidden u-text-center';
 
                 self.quizId.textContent = 'Question ID : ' + param.quizId;
                 self.quizCategory.textContent = 'Question Category : ' + param.quizCategory;
@@ -64,6 +69,15 @@
                     self.clues.removeChild(node.parentNode);
                 }
             },
+            showCorrectMessage: function() {
+                self.btnNextQuiz.className = 'button-next-quiz';
+                self.solutionStatus.className = 'answer-status answer-status-correct u-text-center';
+                self.solutionStatus.textContent = 'Correct';
+            },
+            showInCorrectMessage: function() {
+                self.solutionStatus.className = 'answer-status answer-status-incorrect u-text-center';
+                self.solutionStatus.textContent = 'InCorrect';
+            }
         };
         viewCommands[command]();
     };
@@ -77,11 +91,11 @@
     View.prototype.bind = function(event, handler) {
         var self = this;
         if (event === 'nextQuiz') {
-            $on(self.btnNextQuiz,'click',function() {
+            $on(self.btnNextQuiz, 'click', function() {
                 handler(self.countQuestion.textContent);
             });
         } else if (event === 'skipQuiz') {
-            $on(self.btnSkipQuiz,'click',function() {
+            $on(self.btnSkipQuiz, 'click', function() {
                 handler(self.countAnswer.textContent);
             });
         } else if (event === 'addClueToSolution') {

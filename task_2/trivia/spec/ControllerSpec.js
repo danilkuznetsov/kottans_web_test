@@ -3,7 +3,9 @@ describe('controller', function() {
     var modelMock, viewMock, controller;
 
     beforeEach(function() {
-        modelMock = jasmine.createSpyObj('model', ['incrementCountQuestion', 'incrementCountAnswer', 'readCountQuestion', 'readCountAnswer', 'getQuestion']);
+        modelMock = jasmine.createSpyObj('model', ['incrementCountQuestion', 'incrementCountAnswer', 'readCountQuestion',
+            'readCountAnswer', 'getQuestion', 'removeCharInSolution', 'addCharToSolution'
+        ]);
         viewMock = jasmine.createSpyObj('view', ['render', 'bind']);
 
         modelMock.incrementCountAnswer.and.callFake(function(callback) {
@@ -24,21 +26,29 @@ describe('controller', function() {
                 quizId: 100,
                 quizCategory: 'QuizCategory',
                 quizText: 'QuizText',
-                quizAnswer: 'Test quiz answer',
-                quizAnswerByChar: ['T', 'e', 's', 't', ' ', 'q', 'u', 'i', 'z', ' ', 'a', 'n', 's', 'w', 'e', 'r']
+                quizAnswer: 'answer',
+                quizAnswerByChar: ['a', 'n', 's', 'w', 'e', 'r']
             });
         });
 
         modelMock.readCountQuestion.and.callFake(function(callback) {
             callback({
-                countQuestion:150
+                countQuestion: 150
             });
         });
 
         modelMock.readCountAnswer.and.callFake(function(callback) {
             callback({
-                countAnswer:10
+                countAnswer: 10
             });
+        });
+
+        modelMock.addCharToSolution.and.callFake(function(char, index, callback) {
+            callback(char, index, 'correct');
+        });
+
+        modelMock.removeCharInSolution.and.callFake(function(char, index, callback) {
+            callback(char, index);
         });
 
         controller = new app.Controller(modelMock, viewMock);
@@ -64,8 +74,8 @@ describe('controller', function() {
             quizId: 100,
             quizCategory: 'QuizCategory',
             quizText: 'QuizText',
-            quizAnswer: 'Test quiz answer',
-            quizAnswerByChar: ['T', 'e', 's', 't', ' ', 'q', 'u', 'i', 'z', ' ', 'a', 'n', 's', 'w', 'e', 'r']
+            quizAnswer: 'answer',
+            quizAnswerByChar: ['a', 'n', 's', 'w', 'e', 'r']
         });
 
     });
@@ -83,9 +93,82 @@ describe('controller', function() {
             quizId: 100,
             quizCategory: 'QuizCategory',
             quizText: 'QuizText',
-            quizAnswer: 'Test quiz answer',
-            quizAnswerByChar: ['T', 'e', 's', 't', ' ', 'q', 'u', 'i', 'z', ' ', 'a', 'n', 's', 'w', 'e', 'r']
+            quizAnswer: 'answer',
+            quizAnswerByChar: ['a', 'n', 's', 'w', 'e', 'r']
         });
 
     });
+
+    it('should add char to solution and  check solution and render correct result to view', function() {
+        var char = 'c';
+        var index = 0;
+        controller.addCharToSolution(char, index);
+
+        expect(modelMock.addCharToSolution).toHaveBeenCalled();
+
+        expect(viewMock.render).toHaveBeenCalledWith('removeCharInClues', {
+            char: char,
+            index: index
+        });
+
+        expect(viewMock.render).toHaveBeenCalledWith('addCharToSolution', {
+            char: char,
+            index: index
+        });
+
+        expect(viewMock.render).toHaveBeenCalledWith('showCorrectMessage');
+
+        expect(modelMock.incrementCountAnswer).toHaveBeenCalled();
+        expect(viewMock.render).toHaveBeenCalledWith('showCountAnswer', 100);
+
+    });
+
+    it('should add char to solution and  check solution and render incorrect result to view', function() {
+        var char = 'c';
+        var index = 0;
+
+        modelMock.addCharToSolution.and.callFake(function(char, index, callback) {
+            callback(char, index, 'incorrect');
+        });
+
+        controller.addCharToSolution(char, index);
+
+        expect(modelMock.addCharToSolution).toHaveBeenCalled();
+
+        expect(viewMock.render).toHaveBeenCalledWith('removeCharInClues', {
+            char: char,
+            index: index
+        });
+
+        expect(viewMock.render).toHaveBeenCalledWith('addCharToSolution', {
+            char: char,
+            index: index
+        });
+
+        expect(viewMock.render).toHaveBeenCalledWith('showInCorrectMessage');
+
+    });
+
+    it('should remove char to solution and render result to view', function() {
+        var char = 'c';
+        var index = 0;
+
+
+        controller.removeCharInSolution(char, index);
+
+        expect(modelMock.removeCharInSolution).toHaveBeenCalled();
+
+        expect(viewMock.render).toHaveBeenCalledWith('removeCharInSolution', {
+            char: char,
+            index: index
+        });
+
+        expect(viewMock.render).toHaveBeenCalledWith('addCharToClues', {
+            char: char,
+            index: index
+        });
+
+
+    });
+
 });

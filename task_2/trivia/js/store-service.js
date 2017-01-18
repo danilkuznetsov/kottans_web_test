@@ -35,28 +35,33 @@
 
     StoreService.prototype.getQuestion = function(cbSuccess, cbFail) {
 
-        var request = $.getJSON("http://jservice.io/api/random?count=10");
+        var xhr = new XMLHttpRequest();
+        xhr.addEventListener('readystatechange', function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
 
-        request.done(function(data) {
-            var result = {};
-            var triviaQuiz = data.shift();
+                    var data = JSON.parse(xhr.responseText);
+                    var result = {};
+                    var triviaQuiz = data.shift();
 
-            result.quizId = triviaQuiz.id;
-            result.quizText = triviaQuiz.question;
-            result.quizCategory = triviaQuiz.category.title;
-            // clean up  the answer from atrifacts and replace space to _
+                    result.quizId = triviaQuiz.id;
+                    result.quizText = triviaQuiz.question;
+                    result.quizCategory = triviaQuiz.category.title;
+                    // clean up  the answer from atrifacts and replace space to _
 
-            var answer = triviaQuiz.answer.replace(/<i>|<\/i>|\(|\)|\\|\/|\"|\'/g, '').replace(/\s/g, '_');
-            result.quizAnswer = answer.toLowerCase();
+                    var answer = triviaQuiz.answer.replace(/<i>|<\/i>|\(|\)|\\|\/|\"|\'/g, '').replace(/\s/g, '_');
+                    result.quizAnswer = answer.toLowerCase();
 
-            cbSuccess = cbSuccess || function() {};
-            cbSuccess.call(this, result);
-
+                    cbSuccess = cbSuccess || function() {};
+                    cbSuccess.call(this, result);
+                } else {
+                    cbFail('There was a problem with the ajax request.');
+                }
+            }
         });
 
-        request.fail(function() {
-            cbFail();
-        });
+        xhr.open('GET', 'https://jservice.io/api/random', true);
+        xhr.send(null);
 
     };
 

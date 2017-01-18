@@ -27,8 +27,8 @@ describe('model ', function() {
                 quizId: 101,
                 quizCategory: 'TestCategory',
                 quizText: 'Test quiz text',
-                quizAnswer: 'Test quiz answer',
-                quizAnswerByChar: ['T', 'e', 's', 't', ' ', 'q', 'u', 'i', 'z', ' ', 'a', 'n', 's', 'w', 'e', 'r']
+                quizAnswer: 'answer',
+                quizAnswerByChar: ['a', 'n', 's', 'w', 'e', 'r']
             });
         });
 
@@ -54,8 +54,6 @@ describe('model ', function() {
             countQuestion: 100
         });
     });
-
-
 
     it('should increase count question', function() {
         var expectedCountQuestion = 1;
@@ -127,8 +125,8 @@ describe('model ', function() {
             quizId: 101,
             quizCategory: 'TestCategory',
             quizText: 'Test quiz text',
-            quizAnswer: 'Test quiz answer',
-            quizAnswerByChar: ['T', 'e', 's', 't', ' ', 'q', 'u', 'i', 'z', ' ', 'a', 'n', 's', 'w', 'e', 'r']
+            quizAnswer: 'answer',
+            quizAnswerByChar: ['a', 'n', 's', 'w', 'e', 'r']
         });
         expect(cbFailSpy).not.toHaveBeenCalled();
     });
@@ -149,6 +147,90 @@ describe('model ', function() {
 
         expect(cbSuccessSpy).not.toHaveBeenCalled();
         expect(cbFailSpy).toHaveBeenCalled();
+    });
+
+
+    it('should add and remove char in solution and call callback in both methods', function() {
+        setUpModel(storeServiceMock);
+
+        var cbSuccessSpy = jasmine.createSpy('cbSucces');
+        var cbFailSpy = jasmine.createSpy('cbFail');
+        model.getQuestion(cbSuccessSpy, cbFailSpy);
+
+        var addCallbackSpy = jasmine.createSpy('addCallbackSpy');
+        var removeCallbackSpy = jasmine.createSpy('removeCallbackSpy');
+
+        var char = 'c';
+        var index = 0;
+
+        // add part
+        model.addCharToSolution(char, index, addCallbackSpy);
+        expect(addCallbackSpy).toHaveBeenCalledWith(char, index,'incomplete');
+        expect(model.getSolution()).toEqual([{
+            char: char,
+            index: index
+        }]);
+        // remove part
+        model.removeCharInSolution(char, index, removeCallbackSpy);
+        expect(removeCallbackSpy).toHaveBeenCalledWith(char, index);
+        expect(model.getSolution()).toEqual([]);
+
+    });
+
+    it('should check solution and return incomplete result', function() {
+
+        setUpModel(storeServiceMock);
+
+        var cbSuccessSpy = jasmine.createSpy('cbSucces');
+        var cbFailSpy = jasmine.createSpy('cbFail');
+        model.getQuestion(cbSuccessSpy, cbFailSpy);
+
+        var addCallbackSpy = jasmine.createSpy('addCallbackSpy');
+        var char = 'T';
+        var index = 0;
+        model.addCharToSolution(char, index, addCallbackSpy);
+
+        var actualResult = model.checkSolution();
+        expect(actualResult).toEqual('incomplete');
+    });
+
+    it('should check solution and return incorrect result', function() {
+
+        setUpModel(storeServiceMock);
+
+        var cbSuccessSpy = jasmine.createSpy('cbSucces');
+        var cbFailSpy = jasmine.createSpy('cbFail');
+        model.getQuestion(cbSuccessSpy, cbFailSpy);
+
+        var addCallbackSpy = jasmine.createSpy('addCallbackSpy');
+        var char = 'T';
+        var index = 0;
+
+        for (var i = 0; i < 10; i++) {
+            model.addCharToSolution(char, index, addCallbackSpy);
+        }
+
+        var actualResult = model.checkSolution();
+        expect(actualResult).toEqual('incorrect');
+    });
+
+    it('should check solution and return correct result', function() {
+
+        setUpModel(storeServiceMock);
+
+        var cbSuccessSpy = jasmine.createSpy('cbSucces');
+        var cbFailSpy = jasmine.createSpy('cbFail');
+        model.getQuestion(cbSuccessSpy, cbFailSpy);
+
+        var addCallbackSpy = jasmine.createSpy('addCallbackSpy');
+        model.addCharToSolution('a', 0, addCallbackSpy);
+        model.addCharToSolution('n', 1, addCallbackSpy);
+        model.addCharToSolution('s', 2, addCallbackSpy);
+        model.addCharToSolution('w', 3, addCallbackSpy);
+        model.addCharToSolution('e', 4, addCallbackSpy);
+        model.addCharToSolution('r', 5, addCallbackSpy);
+        var actualResult = model.checkSolution();
+        expect(actualResult).toEqual('correct');
     });
 
 });

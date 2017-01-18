@@ -32,11 +32,14 @@
     Model.prototype.getQuestion = function(cbSuccess, cbFail) {
         var self = this;
         self._storeService.getQuestion(function(receivedQuestion) {
-
             self._correctAnswer = receivedQuestion.quizAnswer;
             self._solution = [];
 
-            receivedQuestion.quizAnswerByChar = self._correctAnswer.split('');
+            receivedQuestion.quizAnswerByChar = self._correctAnswer
+                .split('')
+                .sort(function() {
+                    return 0.5 - Math.random();
+                });
             cbSuccess.call(this, receivedQuestion);
         }, cbFail);
     };
@@ -47,8 +50,10 @@
             char: char,
             index: index
         });
+
+        var result = this.checkSolution();
         callback = callback || function() {};
-        callback.call(this, char, index);
+        callback.call(this, char, index, result);
     };
 
     Model.prototype.removeCharInSolution = function(char, index, callback) {
@@ -61,6 +66,25 @@
         callback.call(this, char, index);
     };
 
+    Model.prototype.getSolution = function() {
+        return this._solution;
+    };
+
+    Model.prototype.checkSolution = function() {
+        var self = this;
+
+        if (self._solution.length < self._correctAnswer.length) {
+            return 'incomplete';
+        }
+
+        var solution = self._solution
+            .map(function(element) {
+                return element.char;
+            })
+            .join('');
+
+        return self._correctAnswer === solution ? 'correct' : 'incorrect';
+    };
 
     // export to window
     window.app = window.app || {};
